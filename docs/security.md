@@ -8,7 +8,7 @@ There is no inbound authentication in the application. Restrict it to intended c
 
 Docker access is privileged even with a read-only socket mount. GET-only route definitions do not constrain what a compromised process can do. Likewise, using a Proxmox token for GET requests does not prove the token's assigned permissions are read-only; validate least privilege separately.
 
-The public copy requires private endpoints through environment variables and enables Proxmox certificate verification. A private CA bundle can be supplied. The inspected deployment disabled that verification; the safer public adaptation is not a deployed remediation.
+The public copy requires private endpoints through environment variables and enables Proxmox certificate verification. A private CA bundle can be supplied. This public adaptation is not a deployed remediation; live trust configuration remains private.
 
 ## Data quality and interpretation
 
