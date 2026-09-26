@@ -1,23 +1,27 @@
-# Evidence and publication changes
+# Evidence and publication differences
 
 [Home](../README.md)
 
-The source was recovered from the LocalAI/Docker System project mirror. That source remained unchanged during publication.
+## September 26 source refresh
 
-The migration record documents a staged FastAPI conversion and successful Open WebUI host-status tool use. A follow-up records disk I/O support, endpoint verification, schema refresh, and a successful fresh-chat disk check. Legacy tool wrappers were removed after integration.
+The published application was refreshed from the inspected deployed source, replacing the earlier six-tool snapshot. Version 1.1.0 contains thirteen operations: the original diagnostics plus semantic search, AI-worker status, knowledge health, three Proxmox operations, and a combined audit.
 
-A recorded disk snapshot indicated low utilization and no detected bottleneck at that moment. This repository does not treat a single snapshot as a benchmark or availability guarantee.
+Docker inventory now falls back to configured image information when detailed image metadata is unavailable. Schema descriptions contain routing and conservative interpretation guidance for tool-using assistants.
 
-## Changes for the public copy
+## Fresh read-only result
 
-- Replaced the private Prometheus URL and instance with required environment variables.
-- Made the output host label and disk-query job label configurable while retaining the original generic defaults. CPU and memory history retain their original selectors.
-- Required an explicit staging URL in the verification script.
-- Added an example environment file, ignore rules, and documentation.
+At 21:42 UTC, the existing deployed combined audit returned all seven component groups. All three expected guests and eleven expected Docker containers were running. Proxmox reads succeeded, an embedding request returned 2560 dimensions, Qdrant was green, and a semantic query returned a result.
 
-The rest of the recovered application behavior is preserved. These publication changes are not represented as having been deployed to Basecamp.
+The collection held 101 points. Direct inspection found only master knowledge (19) and operations knowledge (82). The morning expansion report's 235 points and 28/28 retrieval checks are historical; processed runbooks survived but were absent from the later index. Cause is unverified.
 
-## Follow-up
+## Public adaptations
 
-Pin and test dependencies, add authentication at the intended trust boundary, distinguish missing metrics from zero, review severity escalation, and test with representative device mappings. Add regression tests before changing those behaviors.
+- Replace private endpoints, network hosts, and the upstream token identity with environment configuration.
+- Retain generic host/job/collection defaults.
+- Enable Proxmox certificate verification, optionally using a configured CA bundle.
+- Update example configuration and staging verification for the current operation set.
+- Add mocked regression tests; all eleven passed.
 
+The live deployment was not modified. Public certificate/configuration adaptations have not been deployed or verified through a full new container rollout. The historical Dockerfile remains unpinned.
+
+See [operations](operations.md) for test scope and [security](security.md) for known limitations.

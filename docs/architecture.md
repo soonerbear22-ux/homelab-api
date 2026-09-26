@@ -4,15 +4,27 @@
 
 ```mermaid
 flowchart LR
-    UI[Open WebUI] -->|OpenAPI GET tools| API[FastAPI]
-    API --> Docker[Docker daemon]
-    API --> Proc[Linux proc and process tools]
-    API --> Prom[Prometheus]
-    Prom --> Exporter[Node Exporter]
+    UI["Open WebUI"] --> API["FastAPI / OpenAPI"]
+    API --> Docker["Docker daemon"]
+    API --> Linux["Linux host observations"]
+    API --> Prom["Prometheus"]
+    API --> PVE["Proxmox API"]
+    API --> Embed["Qwen3-Embedding-4B / TEI"]
+    API --> Qdrant["Qdrant"]
 ```
 
-Docker status uses the Docker SDK. Host and process readings use Linux facilities. History and disk I/O use Prometheus queries. Disk resolution maps a requested path to an exported filesystem/device, including device-mapper names.
+## Live telemetry and stored evidence
 
-The host label is descriptive; it does not change namespace visibility. Running inside a container can change what filesystem, processes, and devices are visible. Correct host observation requires deliberate deployment configuration.
+Docker, Linux facilities, Prometheus, and Proxmox provide operational observations. Semantic search embeds a natural-language query and returns matching document chunks with source, section, chunk sequence, file type, and score. Retrieved documents remain dated evidence; a similarity score is not factual confidence.
 
-The exposed interface contains read operations only. The process itself still holds powerful access to Docker and potentially host resources. Interface shape and operating-system privilege are different security properties.
+AI-worker status distinguishes TCP reachability from embedding-service HTTP health. Knowledge health performs an actual embedding request, reads collection state, and performs a vector query. Its query confirms a result exists, not that the corpus is complete or the result answers a representative question.
+
+## Combined audit
+
+The combined operation gathers seven component groups. Each group has its own success flag or error; an exception does not discard other results. `complete` means all groups returned, not that all underlying checks are healthy. Inspect the nested results.
+
+Derived fields discourage unsupported diagnoses from slightly-above-allocation VM memory, zero indexed-vector counts, or mutable image tags. Some expected guests and containers are specific to this lab. These checks must be adapted before using the service for a different deployment.
+
+## Privilege and visibility
+
+Host labels do not change container namespaces. Host process, filesystem, and device observations depend on runtime mounts and namespace configuration. GET-only routes do not restrict the Docker socket or upstream credential privileges available to the process.

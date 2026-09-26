@@ -1,35 +1,45 @@
-# Configuration and validation
+# Configuration and verification
 
 [Home](../README.md)
 
-## Runtime prerequisites
+## Runtime
 
-Python 3.12, Linux, a reachable Docker daemon, `procps`, and Prometheus with the expected Node Exporter metrics. The recovered Dockerfile installs FastAPI, Uvicorn, Docker SDK, and Requests. Dependencies are not pinned in this historical snapshot; a tested lockfile remains follow-up work.
+The recovered Dockerfile uses Python 3.12, Linux `procps`, FastAPI, Uvicorn, Docker SDK, and Requests. Its dependencies remain unpinned as in the inspected deployment. A production lockfile and full rebuild test are follow-up work.
 
-Supply these environment variables explicitly:
+The application initializes the Docker client at import time. Supply its intended daemon connection and host visibility deliberately. No privileged turnkey Compose file is included.
 
-| Variable | Meaning |
+## Public configuration
+
+| Variable | Purpose |
 | --- | --- |
-| `PROMETHEUS_URL` | Required Prometheus base URL |
-| `PROMETHEUS_INSTANCE` | Required target instance label |
-| `PROMETHEUS_JOB` | Disk-query job label; defaults to core-services |
+| `PROMETHEUS_URL`, `PROMETHEUS_INSTANCE` | Metrics endpoint and disk target selector |
+| `PROMETHEUS_JOB` | Disk-query job; defaults to core-services |
 | `HOMELAB_HOST` | Output label; defaults to core-services |
+| `PVE_URL` | Proxmox base URL |
+| `PVE_TOKEN_ID`, `PVE_TOKEN` | Private upstream authentication; keep outside Git |
+| `PVE_CA_BUNDLE` | Optional trusted CA bundle path; otherwise standard certificate verification |
+| `EMBEDDING_URL` | Full embedding request URL, including the embed path |
+| `QDRANT_URL`, `QDRANT_COLLECTION` | Database base URL and collection; collection defaults to homelab_knowledge |
+| `AI_WORKER_LAN_HOST`, `AI_WORKER_OVERLAY_HOST` | Hosts for the two TCP reachability checks |
+| `AI_WORKER_EMBEDDING_URL` | Base URL for the separate HTTP health check |
 
-`.env.example` contains reserved example domains. Copy values into your deployment mechanism; the application does not load an environment file automatically.
+Required endpoint values fail fast when absent. The example file uses reserved domains and empty credentials; the app does not load it automatically.
 
-CPU and memory history retain the original `core-services` job selector and return the first matching series. Changing `PROMETHEUS_JOB` does not retarget those history queries. Adapt and test them before using this snapshot for a different host or multiple matching instances.
+CPU/memory history retains the original core-services job and first-series behavior. Proxmox node, expected VM IDs, and expected container names are still lab-specific constants. Configurable endpoints do not make this a multi-tenant service.
 
-The server uses Uvicorn on port 8091. Host visibility, Docker access, network restrictions, and authentication must be configured separately. No privileged turnkey Compose file is supplied.
+## Local regression checks
 
-## Staging verification
+```text
+python -m pip install -r requirements-test.txt
+python -m pytest tests -q
+```
 
-Run `python verify_stage.py BASE_URL` against an authorized staging deployment. The script checks exactly six schema operations, GET-only discovery, successful JSON responses, history points, disk resolution, and rejection of an invalid history range.
+Eleven tests passed during publication. External services and the Docker client are mocked; no production changes occur. Tests cover the thirteen-operation schema, invalid inputs, retrieval provenance, image metadata failure, embedding failure, partial audits, interpretation boundaries, and Proxmox certificate verification.
 
-The script expects the original `core-services` output label and a populated metric history. Change that assertion if intentionally adapting the host label. It does not test authorization, recovery, all error cases, or every disk heuristic.
+## Deployment verification
 
-After a schema change, refresh the Open WebUI connection and test in a fresh chat. The original disk-tool rollout encountered stale discovery in an existing conversation.
+Run `python verify_stage.py BASE_URL` against an authorized staging environment with the intended dependencies. The verifier checks discovery, route responses, actual retrieval, pipeline health, combined-audit results, and invalid-query rejection. Use `--expected-source` to require a known document in the search results.
 
-## Publication validation
+The updated verifier was syntax-checked; its complete staging run has not been performed against a newly deployed public copy. The existing live audit was exercised separately.
 
-Public files are syntax-checked and screened for private addresses. The staging script is retained as historical verification tooling; a new live deployment is not part of this publication task.
-
+Refresh Open WebUI tool discovery after schema changes and test a fresh conversation. An old chat can retain earlier operation definitions.
