@@ -12,10 +12,12 @@ Supply these environment variables explicitly:
 | --- | --- |
 | `PROMETHEUS_URL` | Required Prometheus base URL |
 | `PROMETHEUS_INSTANCE` | Required target instance label |
-| `PROMETHEUS_JOB` | Job label; defaults to core-services |
+| `PROMETHEUS_JOB` | Disk-query job label; defaults to core-services |
 | `HOMELAB_HOST` | Output label; defaults to core-services |
 
 `.env.example` contains reserved example domains. Copy values into your deployment mechanism; the application does not load an environment file automatically.
+
+CPU and memory history retain the original `core-services` job selector and return the first matching series. Changing `PROMETHEUS_JOB` does not retarget those history queries. Adapt and test them before using this snapshot for a different host or multiple matching instances.
 
 The server uses Uvicorn on port 8091. Host visibility, Docker access, network restrictions, and authentication must be configured separately. No privileged turnkey Compose file is supplied.
 
@@ -30,3 +32,4 @@ After a schema change, refresh the Open WebUI connection and test in a fresh cha
 ## Publication validation
 
 Public files are syntax-checked and screened for private addresses. The staging script is retained as historical verification tooling; a new live deployment is not part of this publication task.
+

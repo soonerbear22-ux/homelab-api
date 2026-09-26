@@ -19,9 +19,11 @@ Responses reveal container names, images, process information, and operational m
 - Dependencies are unpinned and need testing before reproducible release use.
 - Import-time Docker initialization means the daemon connection is a startup dependency.
 - Metric selectors use deployment-controlled labels; configuration is trusted input.
+- CPU and memory history select the original job and use the first returned series; multiple targets can produce an unintended host's history.
 
 These are documented limitations of the recovered implementation, not claims that remediation is deployed.
 
 ## Publication policy
 
 No private addresses, tailnet names, credentials, live configuration, or raw operational exports belong in this repository. Keep environment values outside version control.
+

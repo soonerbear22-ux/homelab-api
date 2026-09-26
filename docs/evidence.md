@@ -11,7 +11,7 @@ A recorded disk snapshot indicated low utilization and no detected bottleneck at
 ## Changes for the public copy
 
 - Replaced the private Prometheus URL and instance with required environment variables.
-- Made the host and job labels configurable while retaining the original generic defaults.
+- Made the output host label and disk-query job label configurable while retaining the original generic defaults. CPU and memory history retain their original selectors.
 - Required an explicit staging URL in the verification script.
 - Added an example environment file, ignore rules, and documentation.
 
@@ -20,3 +20,4 @@ The rest of the recovered application behavior is preserved. These publication c
 ## Follow-up
 
 Pin and test dependencies, add authentication at the intended trust boundary, distinguish missing metrics from zero, review severity escalation, and test with representative device mappings. Add regression tests before changing those behaviors.
+
