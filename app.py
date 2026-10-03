@@ -842,6 +842,9 @@ def full_homelab_audit():
         100: "core-services",
         101: "pihole",
         102: "ai-worker",
+        103: "jellyfin",
+        104: "media-automation",
+        105: "arda",
     }
 
     guest_by_vmid = {
