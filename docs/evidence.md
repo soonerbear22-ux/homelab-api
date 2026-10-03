@@ -53,3 +53,11 @@ After deployment:
 The existing Dockerfile remains unpinned. This rebuild resolved FastAPI 0.142.2, Uvicorn 0.54.0, Docker SDK 7.2.0, and Requests 2.34.2. A dependency lock and complete verification of the separate public configuration/certificate adaptations remain follow-up work.
 
 Rollback material is retained privately on the deployment host. No credentials, private addresses, overlay identities, or raw private configuration are published here.
+
+## October 3 Hornburg API candidate
+
+A separate candidate was built from the deployed private source, changing only `PVE_NODE` from `basecamp` to `hornburg`. Cached dependency layers were reused. With external Docker/Proxmox dependencies mocked and networking disabled, the candidate passed import, OpenAPI serialization, new-node selection, and host/guest/storage response-label checks.
+
+The candidate is **prepared only**. The production API source, running container and native Proxmox node still use `basecamp`. The existing endpoint paths and operation IDs are preserved for connector compatibility. Public configuration and TLS adaptations remain separate from the deployed private source.
+
+The operator approved the outage conditional on recovery testing, but Remote Desktop Commander's configured host-reboot restriction blocks cutover execution. See the [maintenance record](https://github.com/soonerbear22-ux/basecamp-homelab/blob/main/docs/hornburg-rename-preflight.md). A future deployment must repeat the full live six-guest/seven-component audit and semantic retrieval checks.
