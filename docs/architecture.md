@@ -28,3 +28,10 @@ Derived fields discourage unsupported diagnoses from slightly-above-allocation V
 ## Privilege and visibility
 
 Host labels do not change container namespaces. Host process, filesystem, and device observations depend on runtime mounts and namespace configuration. GET-only routes do not restrict the Docker socket or upstream credential privileges available to the process.
+
+
+## Current guest expectation
+
+As of the October 3 repository update, the combined audit's expected guest set includes VM/LXC IDs 100 through 105. The API still discovers guest telemetry dynamically from Proxmox; the expected set is used only for derived presence/running checks.
+
+Repository state and deployed runtime state must be distinguished. Updating this source does not establish that the live container has been rebuilt or restarted.
