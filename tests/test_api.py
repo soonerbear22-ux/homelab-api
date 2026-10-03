@@ -138,6 +138,9 @@ def test_audit_retains_partial_results_and_avoids_false_index_alarm(api, monkeyp
         {'vmid': 100, 'name': 'core-services', 'status': 'running'},
         {'vmid': 101, 'name': 'pihole', 'status': 'running'},
         {'vmid': 102, 'name': 'ai-worker', 'status': 'running', 'memory': {'used_percent': 102}},
+        {'vmid': 103, 'name': 'jellyfin', 'status': 'running'},
+        {'vmid': 104, 'name': 'media-automation', 'status': 'running'},
+        {'vmid': 105, 'name': 'arda', 'status': 'running'},
     ]})
     monkeypatch.setattr(api, 'basecamp_storage', lambda: {'storage': []})
     monkeypatch.setattr(api, 'host_status', lambda: {'host': 'core-services'})
@@ -166,3 +169,30 @@ def test_public_proxmox_copy_verifies_certificates(api, monkeypatch):
     monkeypatch.setenv('PVE_CA_BUNDLE', '/example/ca.pem')
     api.proxmox_get('nodes')
     assert get.call_args.kwargs['verify'] == '/example/ca.pem'
+
+
+def test_audit_current_guest_set(api, monkeypatch):
+    monkeypatch.setattr(api, 'basecamp_status', lambda: {'status': 'online'})
+    monkeypatch.setattr(api, 'basecamp_guests', lambda: {'guests': [
+        {'vmid': 100, 'name': 'core-services', 'status': 'running'},
+        {'vmid': 101, 'name': 'pihole', 'status': 'running'},
+        {'vmid': 102, 'name': 'ai-worker', 'status': 'running', 'memory': {'used_percent': 50}},
+        {'vmid': 103, 'name': 'jellyfin', 'status': 'running'},
+        {'vmid': 104, 'name': 'media-automation', 'status': 'running'},
+        {'vmid': 105, 'name': 'arda', 'status': 'running'},
+    ]})
+    monkeypatch.setattr(api, 'basecamp_storage', lambda: {'storage': []})
+    monkeypatch.setattr(api, 'host_status', lambda: {'host': 'core-services'})
+    monkeypatch.setattr(api, 'docker_status', lambda: {'containers': []})
+    monkeypatch.setattr(api, 'ai_worker_status', lambda: {})
+    monkeypatch.setattr(api, 'knowledge_pipeline_health', lambda: {'healthy': True, 'checks': {
+        'embedding': {'ok': True, 'dimensions': 2560},
+        'qdrant': {'ok': True, 'status': 'green', 'points_count': 23, 'indexed_vectors_count': 0},
+        'semantic_query': {'ok': True, 'results_returned': 1},
+    }})
+    result = api.full_homelab_audit()
+    facts = result['derived_facts']['guests']
+    assert facts['expected_guest_count'] == 6
+    assert facts['all_expected_guests_present'] is True
+    assert facts['all_expected_guests_running'] is True
+    assert set(facts['guest_state']) == {'100', '101', '102', '103', '104', '105'}
