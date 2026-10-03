@@ -31,4 +31,25 @@ See [operations](operations.md) for test scope and [security](security.md) for k
 
 The public audit source was updated to recognize six current guests: core-services (100), Pi-hole (101), ai-worker (102), Jellyfin (103), media automation (104), and Arda (105). Regression coverage now asserts that all six are represented in the derived guest-state summary.
 
-This is repository evidence only. The live deployed API must be separately verified before claiming that its running code includes this change.
+At the time of repository alignment, the live deployment still required separate verification. The subsequent deployment evidence is recorded below.
+
+## October 3 live six-guest deployment
+
+At 04:14:34 UTC on October 3 (11:14:34 p.m. America/Chicago on October 2), the running API was verified after a scoped rebuild and recreation of only `homelab-api`.
+
+Live host source matched the previous container and compiled correctly. Both still expected guests 100–102. Neither suspected typo was present. The host change added only guests 103, 104, and 105 to `expected_guests`; it did not replace private runtime configuration with the public source.
+
+Before deployment, the original source, actual running image, and other-container identity/start-time snapshot were preserved. The rebuilt image passed application imports, source hashing, health-function validation, the thirteen GET-only OpenAPI operations, JSON serialization, and thirteen isolated audit scenarios covering all guests running and each guest missing or stopped. The full pytest suite was not run in this deployment session.
+
+After deployment:
+
+- `GET /health` returned `{"status": "ok"}`.
+- `GET /audit/full.json` retrieved all seven component groups.
+- The derived guest summary expected six guests, with all six present and running.
+- The knowledge pipeline confirmed operational semantic retrieval.
+- Live host and running-container source hashes matched.
+- The ten other core-services containers retained their IDs and start times.
+
+The existing Dockerfile remains unpinned. This rebuild resolved FastAPI 0.142.2, Uvicorn 0.54.0, Docker SDK 7.2.0, and Requests 2.34.2. A dependency lock and complete verification of the separate public configuration/certificate adaptations remain follow-up work.
+
+Rollback material is retained privately on the deployment host. No credentials, private addresses, overlay identities, or raw private configuration are published here.
