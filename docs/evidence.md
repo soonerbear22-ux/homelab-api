@@ -25,3 +25,10 @@ The collection held 101 points. Direct inspection found only master knowledge (1
 The live deployment was not modified. Public certificate/configuration adaptations have not been deployed or verified through a full new container rollout. The historical Dockerfile remains unpinned.
 
 See [operations](operations.md) for test scope and [security](security.md) for known limitations.
+
+
+## October 3 repository alignment
+
+The public audit source was updated to recognize six current guests: core-services (100), Pi-hole (101), ai-worker (102), Jellyfin (103), media automation (104), and Arda (105). Regression coverage now asserts that all six are represented in the derived guest-state summary.
+
+This is repository evidence only. The live deployed API must be separately verified before claiming that its running code includes this change.
