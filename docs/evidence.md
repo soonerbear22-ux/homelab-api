@@ -61,3 +61,13 @@ A separate candidate was built from the deployed private source, changing only `
 The candidate is **prepared only**. The production API source, running container and native Proxmox node still use `basecamp`. The existing endpoint paths and operation IDs are preserved for connector compatibility. Public configuration and TLS adaptations remain separate from the deployed private source.
 
 The operator approved the outage conditional on recovery testing, but Remote Desktop Commander's configured host-reboot restriction blocks cutover execution. See the [maintenance record](https://github.com/soonerbear22-ux/basecamp-homelab/blob/main/docs/hornburg-rename-preflight.md). A future deployment must repeat the full live six-guest/seven-component audit and semantic retrieval checks.
+
+## October 3 completed Hornburg deployment
+
+The approved native rename completed after an operator-issued host reboot at about 01:50 America/Chicago (06:50 UTC). At 06:52 UTC, the prepared private-source candidate was deployed by recreating only homelab-api. Its live source/container SHA-256 matched `ac818e381b8f52751b74f030024194c706b80dd58b7e1efa46cc20fc1bc3786b`.
+
+The node reference is now `hornburg`. Existing API paths and operation IDs remain unchanged for connector compatibility; the public source's node assignment is aligned. Private endpoint/token configuration was preserved, and separate public TLS/configuration adaptations were not silently substituted.
+
+The final 06:57 UTC audit retrieved all seven components, confirmed six expected running guests and eleven running core containers, and passed embeddings, Qdrant and semantic retrieval. Prometheus needed a separate start after it failed to resume on boot; all four monitoring targets then reported up. The API deployment itself did not recreate the other ten core containers.
+
+The preceding "prepared only" section is historical and superseded by this completion record. See the [completed maintenance record](https://github.com/soonerbear22-ux/basecamp-homelab/blob/main/docs/hornburg-rename-preflight.md) for compatibility names, recovery material and acceptance limits.
