@@ -33,6 +33,8 @@ The additional `/health` route is excluded from discovery. History accepts `1h`,
 - Preserved container inventory when an image metadata lookup fails.
 - Added eleven mocked regression checks for contracts, validation, provenance, failure handling, and certificate verification.
 
+The repository audit logic now recognizes the current six-guest topology (100–105), including Jellyfin, media automation, and Arda. This repository change does not by itself prove the live deployed API has been updated.
+
 A fresh deployment audit retrieved 7/7 component groups. It found the knowledge pipeline operational against **101 points / two baseline sources**, which differs from the earlier expansion report. [Evidence and limits](docs/evidence.md) explain the discrepancy.
 
 ## Read next
