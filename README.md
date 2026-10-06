@@ -1,6 +1,6 @@
 # Homelab API
 
-A FastAPI/OpenAPI tool server connecting Open WebUI to live infrastructure telemetry and semantic homelab knowledge. Built for Logan's Basecamp environment.
+A FastAPI/OpenAPI tool server connecting Open WebUI to live infrastructure telemetry and semantic homelab knowledge. Built for the Middle-earth Homelab infrastructure, now hosted on Hornburg.
 
 **Updated September 26, 2026 — application version 1.1.0.** This public source is a sanitized copy of the inspected deployment: thirteen GET operations, robust Docker inventory, retrieval, dependency health, Proxmox inventory, and a combined audit.
 
@@ -33,6 +33,10 @@ The additional `/health` route is excluded from discovery. History accepts `1h`,
 - Preserved container inventory when an image metadata lookup fails.
 - Added eleven mocked regression checks for contracts, validation, provenance, failure handling, and certificate verification.
 
+## Current infrastructure alignment — October 6, 2026
+
+The Proxmox node is `hornburg`; `/basecamp/*` routes and operation IDs intentionally remain for connector compatibility. Six-guest live deployment was verified in the October 3 [completion evidence](docs/evidence.md). The independent [monitoring triangle](https://github.com/soonerbear22-ux/basecamp-homelab/blob/main/docs/monitoring.md) is verified outside this API; HTTP `/health` alone does not establish every downstream dependency. This documentation pass does not rebuild/deploy the API or synchronize Local AI material.
+
 The repository audit logic now recognizes the current six-guest topology (100–105), including Jellyfin, media automation, and Arda. This repository change does not by itself prove the live deployed API has been updated.
 
 A fresh deployment audit retrieved 7/7 component groups. It found the knowledge pipeline operational against **101 points / two baseline sources**, which differs from the earlier expansion report. [Evidence and limits](docs/evidence.md) explain the discrepancy.
@@ -44,6 +48,6 @@ A fresh deployment audit retrieved 7/7 component groups. It found the knowledge 
 - [Security and limitations](docs/security.md)
 - [Evidence and publication differences](docs/evidence.md)
 
-Related: [Local AI Lab](https://github.com/soonerbear22-ux/local-ai-lab) · [Basecamp](https://github.com/soonerbear22-ux/basecamp-homelab)
+Related: [Local AI Lab](https://github.com/soonerbear22-ux/local-ai-lab) · [Middle-earth Homelab](https://github.com/soonerbear22-ux/basecamp-homelab)
 
 The public copy externalizes private endpoints and enables Proxmox certificate verification. These publication adaptations have not been deployed to the running lab. This repository is a lab-specific implementation, not a hardened general-purpose monitoring service.
